@@ -17,10 +17,20 @@ class TestCleaner(unittest.TestCase):
         expected_re = ".*steamusercontent.*826819056193990579.?463E89FC63C89C2C482ED24760EBF1BDC354D731.*"
         self.assertEqual(r, expected_re)
         filename = "httpcloud3steamusercontentcomugc826819056193990579463E89FC63C89C2C482ED24760EBF1BDC354D731.jpg"
+        filename2 = "httpcloud3steamusercontentcomugc826819056193990579463E89FC63C89ggg482ED24760EBF1BDC354D731.jpg"
         self.assertTrue(re.match(r, filename))
-        self.assertFalse(re.match(r, filename + "asdf"))
+        self.assertFalse(re.match(r, filename2))
         ct = tts_asset_reuploader.CachedThing(filename)
         self.assertTrue(ct.matches_re(r))
+
+    def test_cache_rename(self):
+        url1 = "http://cloud-3.steamusercontent.com/ugc/787504189454522274/F14489C6631D2B9727BC0E8A2580182FD2269078/"
+        url2 = "https://steamusercontent-a.akamaihd.net/ugc/787504189454522274/F14489C6631D2B9727BC0E8A2580182FD2269078/"
+        url3 = "https://steamusercontent-a.akamaihd.net/ugc/826819056193990579/463E89FC63C89C2C482ED24760EBF1BDC354D731/"
+        url1_n = tts_asset_reuploader.normalize_steam_url(url1)
+        self.assertEqual(url1_n, url2)
+        url3_n = tts_asset_reuploader.normalize_steam_url(url3)
+        self.assertEqual(url3_n, url3)
 
 
 if __name__ == "__main__":

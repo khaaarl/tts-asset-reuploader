@@ -165,6 +165,16 @@ def get_cache_things():
     return cache_things
 
 
+def normalize_steam_url(url):
+    if "http://cloud-3" in url:
+        url = re.sub(
+            "^http://cloud-3.steamusercontent.com/",
+            "https://steamusercontent-a.akamaihd.net/",
+            url,
+        )
+    return url
+
+
 def update_dead_urls(filename, cache_things):
     o = json.loads(read_file(filename))
     urls = sorted(list(set(get_obj_urls(o))))
@@ -176,6 +186,7 @@ def update_dead_urls(filename, cache_things):
         if "steamusercontent" not in u:
             continue
         print(u)
+        u = normalize_steam_url(u)
         r = requests.get(u)
         status_code_counts[r.status_code] += 1
         if r.status_code == 200:
