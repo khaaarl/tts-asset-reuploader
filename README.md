@@ -5,6 +5,11 @@ Sometimes, URLs used in Tabletop Simulator games go down. If you have the file i
 The above paragraph in numbered instructions:
 
 1. Have Python installed if you haven't already.
-2. Run the script aimed at one of your save files, via the command line: `python tts_asset_reuploader.py path/to/savegame.json` (this can take a little while if there are a lot of URLs to fetch)
+2. Run the script aimed at one of your save files, via the command line:
+   ```
+   python tts_asset_reuploader.py "C:\path\to\your\savegame.json"
+   ```
+   (this can take a little while if there are a lot of URLs to fetch)
 3. Reopen the save game in Tabletop Simulator
 4. Upload All Loaded Files (Modding -> Cloud Manager -> little up arrow "Upload All Loaded Files") (this can take a while if there are many items to upload).
+5. Save game.
