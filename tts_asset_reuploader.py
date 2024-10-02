@@ -174,6 +174,14 @@ def normalize_steam_url(url):
         )
     return url
 
+def old_steam_url(url):
+    if "steamusercontent-a.akamaihd" in url:
+        url = re.sub(
+            "^https://steamusercontent-a.akamaihd.net/",
+            "http://cloud-3.steamusercontent.com/",
+            url,
+        )
+    return url
 
 def update_dead_urls(filename, cache_things):
     o = json.loads(read_file(filename))
@@ -199,6 +207,7 @@ def update_dead_urls(filename, cache_things):
     print(status_code_counts)
 
     url_replacements = {}
+    num_replacements = 0
     for u in missing_urls:
         r = url_in_cache_re(u)
         matching_cache_things = []
@@ -209,8 +218,10 @@ def update_dead_urls(filename, cache_things):
         if len(matching_cache_things) >= 1:
             print("Cache location:", matching_cache_things[0].full_path)
             url_replacements[u] = "file:///" + matching_cache_things[0].full_path
+            url_replacements[old_steam_url(u)] = url_replacements[u]
+            num_replacements += 1
     print(
-        "Found", len(url_replacements), "things that were 404-ing but we have cached."
+        "Found", num_replacements, "things that were 404-ing but we have cached."
     )
     if not url_replacements:
         print(
