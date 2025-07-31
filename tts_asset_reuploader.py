@@ -1,6 +1,4 @@
-"""
-
-"""
+""" """
 
 import collections
 import json
@@ -9,11 +7,12 @@ import os
 import pathlib
 import random
 import re
-import requests
-import sys
 import sqlite3
+import sys
 import time
 from time import gmtime, strftime
+
+import requests
 
 # If your Tabletop Simulator data directory is in some alternative location,
 # paste it in the quotes below.
@@ -32,7 +31,11 @@ def tts_default_locations():
             )
         ]
     elif sys.platform == "darwin":  # mac osx
-        return [os.path.join(str(pathlib.Path.home()), "Library", "Tabletop Simulator")]
+        return [
+            os.path.join(
+                str(pathlib.Path.home()), "Library", "Tabletop Simulator"
+            )
+        ]
     elif sys.platform == "win32":
         return [
             os.path.join(
@@ -139,7 +142,9 @@ if not os.path.exists(TMP_DIR):
 
 def get_cache_things():
     cache_things = []
-    print("Examining TTS cache. If we find zero things, something probably went wrong.")
+    print(
+        "Examining TTS cache. If we find zero things, something probably went wrong."
+    )
     for tts_root in tts_default_locations() + [TTS_DIR_OVERRIDE]:
         if not tts_root or not os.path.exists(tts_root):
             continue
@@ -174,6 +179,7 @@ def normalize_steam_url(url):
         )
     return url
 
+
 def old_steam_url(url):
     if "steamusercontent-a.akamaihd" in url:
         url = re.sub(
@@ -182,6 +188,7 @@ def old_steam_url(url):
             url,
         )
     return url
+
 
 def update_dead_urls(filename, cache_things):
     o = json.loads(read_file(filename))
@@ -217,11 +224,15 @@ def update_dead_urls(filename, cache_things):
         print("404-ing URL:", u)
         if len(matching_cache_things) >= 1:
             print("Cache location:", matching_cache_things[0].full_path)
-            url_replacements[u] = "file:///" + matching_cache_things[0].full_path
+            url_replacements[u] = (
+                "file:///" + matching_cache_things[0].full_path
+            )
             url_replacements[old_steam_url(u)] = url_replacements[u]
             num_replacements += 1
     print(
-        "Found", num_replacements, "things that were 404-ing but we have cached."
+        "Found",
+        num_replacements,
+        "things that were 404-ing but we have cached.",
     )
     if not url_replacements:
         print(

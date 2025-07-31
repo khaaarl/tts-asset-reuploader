@@ -1,0 +1,7 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+skip = ["env"]
+profile = "black"
+line_length = 79
